@@ -150,7 +150,8 @@ tab_model(sdpitch_model, show.re.var= TRUE,
 
 #mean pitch linear mixed effects model with just ADS utterances 
 
-#create dataset that just includes ADS utterances - CHECK: do we need to 
+#create dataset that just includes ADS utterances - CHECK: do we need to look at categories to exclude like we did below
+#for IDS 
 ADScontexts <- subset(pitch, addressee == "ADS") 
 
 #run same model as above except without interaction terms and only with categories > 20 observations 
@@ -207,13 +208,11 @@ tab_model(sdpitch_modelCDS, show.re.var= TRUE,
 
 
 #logistic mixed effects model for addressee and context 
+#renaming speech column in pitch_org  to addressee - using pitch_org dataset because we are including noisy in the model
 
-
-#renaming speech column in pitch_org  to addressee 
 names(pitch_org)[names(pitch_org) == 'speech'] <- 'addressee'
 
 #dummy coding CDS and ADS in pitch_org 
-library(plyr)
 pitch_org$cds <- revalue(pitch_org$addressee, c("CDS"="1", "ADS"="0"))
 addresseecon <- as.factor(pitch_org$cds)
 
@@ -225,3 +224,5 @@ tab_model(contextsbyadd, show.re.var= TRUE,
                          "Vocal Play", "Noisy"),
           dv.labels= "Contexts by Addressee Model")
 
+#need to run regression models of IDS v. ADS in each context (mean pitch and pitch variability) - see Pilot Analyses Google
+#slides
