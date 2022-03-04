@@ -4,26 +4,26 @@ library(tidyverse)
 library(lme4)
 library(lmerTest)
 library(ggplot2)
-#library(simr)
-#library(plyr)
+library(sjPlot)
+library(plyr)
 
 #read in the data 
 pitch_org <- read.table('pitchpilot.txt', header=T)
 
-# exclude rows in which rows look like this: columns 8-15 are coded as 0 AND 16 is coded as 1 
+# excluding exclusively noisy rows:exclude rows in which rows look like this: columns 8-15 are coded as 0 AND 16 is coded as 1 
 
 pitch <- pitch_org[!(!apply(pitch_org[,8:15], 1,any) & pitch_org[,16] == 1),]
-#3 SubIDs were excluded from orginal coding because all files were coded as noisy only
+#3 SubIDs were excluded from original coding because all files were coded as noisy only- check in on this
 
-#renaming speech column to addressee 
+#renaming speech column to addressee in pitch file 
 names(pitch)[names(pitch) == 'speech'] <- 'addressee'
 
-#checking distribution of mean pitch and pitch variability - raw value of pitch 
+#raw value of pitch: creates histogram checking distribution of mean pitch and pitch variability 
 
 hist(pitch$m_pitch)
 hist(pitch$sd_pitch)
 
-#checking distribution of mean pitch and pitch variability - log pitch
+#log pitch: creates histogram checking distribution of mean pitch and pitch variability 
 logp<- log(pitch$m_pitch)
 hist(logp) 
 
@@ -39,21 +39,7 @@ IDScom <- subset(pitch, addressee == "CDS")
 mpitch_comfort = lmer(log(m_pitch) ~ comfort + (1 | ID), data = IDScom)
 summary(mpitch_comfort)
 
-#Power analysis for mean pitch comfort IDS model
-#fixef(mpitch_comfort)
-
-#fixef(mpitch_comfort)["comfort"] <- 0.1
-
-#comfortmod <- extend(mpitch_comfort, within = "ID", n = 225)
-#nrow(getData(comfortmod))
-
-#comfortmodpc <-powerCurve(comfortmod, nsim=1000, test=fixed("comfort", "t"), within="ID", breaks=c(150, 175, 200, 225))
-#print (comfortmodpc)
-#datacomfort <- getData(comfortmod)
-#table(datacomfort$ID)
-
-
-#create regression table
+#create formatted regression table
 library(sjPlot)
 
 tab_model(mpitch_comfort, show.re.var= TRUE, 
@@ -63,35 +49,20 @@ dv.labels= "log(Mean Pitch)")
 #run the linear mixed effects regression - PITCH VARIABILITY
 sdpit_comfort = lmer(log(sd_pit) ~ comfort + (1 | ID), data = IDScom)
 summary(sdpit_comfort)
+
 #create regression table 
 tab_model(sdpit_comfort, show.re.var= TRUE, 
           pred.labels =c("(Intercept)", "Comfort"),
           dv.labels= "Pitch Variability")
 
-
-#linear mixed effects regression for IDS v ADS inform utterances 
+#Analysis 2 - IDS v ADS inform utterances 
+#linear mixed effects regression for IDS v ADS inform utterances - this extracts all inform utterances 
 inform <- subset(pitch, inform =="1")
 
-#linear mixed effects regression - MEAN PITCH
-mpitch_inform = lmer(log(m_pitch) ~ addressee + (1 | ID), data = inform)
-summary(mpitch_inform)
-
-#create regression table 
-tab_model(mpitch_inform, show.re.var= TRUE, 
-          pred.labels =c("(Intercept)", "addressee"),
-          dv.labels= "log(Mean Pitch)")
-
-#linear mixed effects regression - PITCH VARIABILITY
-sdpit_inform = lmer(log(sd_pit) ~ addressee + (1 | ID), data = inform)
-summary(sdpit_inform)
-
-tab_model(sdpit_inform, show.re.var= TRUE, 
-          pred.labels =c("(Intercept)", "addressee"),
-          dv.labels= "Pitch Variablity")
-
-#modeling the above but just INFORM ONLY utterances 
+#selects audio files coded exclusively as inform 
 inform_only <-inform[!apply(inform[,c(8:10, 12:16)], 1,any) & inform[,11] == 1,]
 
+#linear mixed effects for MEAN PITCH
 mpitch_informonly = lmer(log(m_pitch) ~ addressee + (1 | ID), data = inform_only)
 summary(mpitch_informonly)
 
@@ -108,37 +79,27 @@ tab_model(sdpit_informonly, show.re.var= TRUE,
           pred.labels =c("(Intercept)", "addressee"),
           dv.labels= "Pitch Variablity")
 
+#Analysis 3: mixed effects logistic regression for frequency of comfort utterances in IDS v ADS
 
-#mixed effects logistic regression for frequency of comfort utterances in IDS v ADS
+#dummy code ADS and CDS - binary code CDS and ADS in order to run logistic regression 
 
-#dummy code ADS and CDS 
-library(plyr)
 pitch$cds <- revalue(pitch$addressee, c("CDS"="1", "ADS"="0"))
 addressee_com <- as.factor(pitch$cds)
 
 #Logistic regression for comfort utterance frequency by addressee- not working and need to figure out 
 
-addressee_comfort = glmer(comfort ~ pitch$cds + (1 | ID), data = pitch, family=binomial)
+addressee_comfort = glmer(comfort ~ addressee_com + (1 | ID), data = pitch, family=binomial)
 summary(addressee_comfort)
+
+#formatting regression table
 tab_model(addressee_comfort, show.re.var= TRUE, 
           pred.labels =c("(Intercept)", "Comfort"),
           dv.labels= "Comfort Utterances in IDS v ADS")
 
-#Power analysis for logistic regression for comfort utterance frequency by addressee
-fixef(addressee_comfort)
-
-fixef(addressee_comfort)["addresseecom1"] <- 6.13
-
-addcomfortmod <- extend(addressee_comfort, within = "ID", n = 250)
-#nrow(getData(comfortmod))
-
-addcomfortmod_pc <-powerCurve(addcomfortmod, nsim=50, test=fixed("addressee_com1", "z"), within="ID", breaks=c(100, 150, 200, 250))
-print (addcomfortmod_pc)
-datacomfort2 <- getData(addcomfortmod_pc)
-table(datacomfort$ID)
 
 #mixed effects linear regression
 
+#summing number of observations in each category in the pitch file 
 #excluding contexts that have less than 20 instances 
 sum(pitch[,8])
 sum(pitch[,9]) #exclude
@@ -150,20 +111,23 @@ sum(pitch[,14])
 sum(pitch[,15]) #exclude
 sum(pitch[,16]) #exclude 
 
-#checking on interaction terms and excluding ones with less than 10 instances from model 
+#checking on interaction terms (context category*addressee) and excluding ones with less than 10 instances from model 
 convo_addressee <- tapply(pitch2$convo, pitch2$addressee, sum)
 inform_addressee <- tapply(pitch2$inform, pitch2$addressee, sum)
 read_addressee <- tapply(pitch2$read, pitch2$addressee, sum) #less than 10 ADS instances
 imperative_addressee <- tapply(pitch2$imperative, pitch2$addressee, sum) #less than 10 ADS instances
 question_addressee <- tapply(pitch2$question, pitch2$addressee, sum)
 
+#creating new dataset to run mixed effects linear regression - excluding categories from above 
 pitch2 = subset(pitch, select = -c(comfort, sing, vocalplay, noisy))
 
+#running mixed effects linear regression 
 mpitch_model = lmer(log(m_pitch) ~ addressee + convo +convo*addressee + inform + inform*addressee + read 
                    + imperative + question + question*addressee + 
                     (1 | ID) + (1 | coder), data = pitch2)
 summary(mpitch_model)
 
+#creating regression table 
 tab_model(mpitch_model, show.re.var= TRUE, 
           pred.labels =c("(Intercept)", "Addressee", "Conversational Basics","Inform",
                          "Reading", "Imperative","Questions","Addressee*Conversational Basics",
@@ -171,12 +135,13 @@ tab_model(mpitch_model, show.re.var= TRUE,
           dv.labels= "Mean Pitch")
 
 
-
-#pitch variability linear mixed effects model 
-
+#doing the same as above except for pitch variability 
+#run the model 
 sdpitch_model = lmer(log(sd_pit) ~ addressee + convo +convo*addressee + inform + inform*addressee + read + 
        imperative + question + question*addressee + (1 | ID) + (1 | coder), data = pitch2)
 summary(sdpitch_model)
+
+#format regression table
 tab_model(sdpitch_model, show.re.var= TRUE, 
           pred.labels =c("(Intercept)", "Addressee", "Conversational Basics","Inform",
                          "Reading", "Imperative","Questions","Addressee*Conversational Basics",
@@ -185,12 +150,14 @@ tab_model(sdpitch_model, show.re.var= TRUE,
 
 #mean pitch linear mixed effects model with just ADS utterances 
 
+#create dataset that just includes ADS utterances - CHECK: do we need to 
 ADScontexts <- subset(pitch, addressee == "ADS") 
 
-
+#run same model as above except without interaction terms and only with categories > 20 observations 
 mpitch_modelADS = lmer(log(m_pitch) ~ convo + inform + question + (1 | ID) + (1 | coder), data = ADScontexts)
 summary(mpitch_modelADS)
 
+#format regression table 
 tab_model(mpitch_modelADS, show.re.var= TRUE, 
           pred.labels =c("(Intercept)", "Conversational Basics","Inform",
                          "Questions"),
@@ -200,6 +167,8 @@ tab_model(mpitch_modelADS, show.re.var= TRUE,
 #pitch variability linear mixed effects model with just ADS utterances 
 sdpitch_modelADS = lmer(log(sd_pit) ~ convo + inform + question + (1 | ID) + (1 | coder), data = ADScontexts)
 summary(sdpitch_modelADS)
+
+#format regression table 
 tab_model(sdpitch_modelADS, show.re.var= TRUE, 
           pred.labels =c("(Intercept)", "Conversational Basics","Inform","Questions"),
           dv.labels= "Pitch Variability")
