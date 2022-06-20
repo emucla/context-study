@@ -1,10 +1,8 @@
-setwd("~/Desktop/Desktop - Emily’s MacBook Pro/Winter 2022/EOC/Pitch Analyses")
+setwd("~/Desktop/")
 
 library(tidyverse)
 library(lme4)
 library(lmerTest)
-library(ggplot2)
-
 
 #read in the data 
 pitch_org <- read.table('pitchpilot.txt', header=T)
@@ -28,9 +26,9 @@ hist(logp)
 logsd<- log(pitch$sd_pit)
 hist(logsd) 
 
-###Hypothesis 1: Comfort IDS v other IDS contexts - linear mixed effects regression###
+###-----------Hypothesis 1: Comfort IDS v other IDS contexts - linear mixed effects regression-----------###
 
-#subset data to get IDS speech utterances only 
+#subset data to get IDS addressee utterances only 
 IDScom <- subset(pitch, addressee == "CDS")
 
 #run the linear mixed effects regression - MEAN PITCH
@@ -53,7 +51,7 @@ tab_model(sdpit_comfort, show.re.var= TRUE,
           dv.labels= "Pitch Variability")
 
 
-### Hypothesis 2: IDS v ADS inform utterances- linear mixed effects regression#### 
+###---------Hypothesis 2: IDS v ADS inform utterances- linear mixed effects regression----------#### 
 inform <- subset(pitch, inform =="1")
 
 #linear mixed effects regression - MEAN PITCH
@@ -74,7 +72,7 @@ tab_model(sdpit_inform, show.re.var= TRUE,
           dv.labels= "Pitch Variablity")
 
 
-###Hypothesis 3: Frequency of comfort utterances in IDS v ADS -mixed effects logistic regression###
+###----------Hypothesis 3: Frequency of comfort utterances in IDS v ADS -mixed effects logistic regression---------###
 
 #dummy code ADS and CDS 
 library(plyr)
@@ -89,7 +87,7 @@ tab_model(addressee_comfort, show.re.var= TRUE,
           pred.labels =c("(Intercept)", "Comfort"),
           dv.labels= "Comfort Utterances in IDS v ADS")
 
-###Exploratory Analyses###
+###------------Exploratory Analyses-----------------###
 
 #excluding contexts that have less than 20 instances 
 sum(pitch[,8])
@@ -102,39 +100,7 @@ sum(pitch[,14])
 sum(pitch[,15]) #exclude
 sum(pitch[,16]) #exclude 
 
-#checking on interaction terms and excluding ones with less than 10 instances from model 
-convo_addressee <- tapply(pitch2$convo, pitch2$addressee, sum)
-inform_addressee <- tapply(pitch2$inform, pitch2$addressee, sum)
-read_addressee <- tapply(pitch2$read, pitch2$addressee, sum) #less than 10 ADS instances
-imperative_addressee <- tapply(pitch2$imperative, pitch2$addressee, sum) #less than 10 ADS instances
-question_addressee <- tapply(pitch2$question, pitch2$addressee, sum)
-
-#removing categories that meet exclusion criteria
-pitch2 = subset(pitch, select = -c(comfort, sing, vocalplay, noisy))
-
-#linear mixed effects regression model - mean pitch 
-mpitch_model = lmer(log(m_pitch) ~ addressee + convo +convo*addressee + inform + inform*addressee + read 
-                   + imperative + question + question*addressee + 
-                    (1 | ID) + (1 | coder), data = pitch2)
-summary(mpitch_model)
-tab_model(mpitch_model, show.re.var= TRUE, 
-          pred.labels =c("(Intercept)", "Addressee", "Conversational Basics","Inform",
-                         "Reading", "Imperative","Questions","Addressee*Conversational Basics",
-                         "Addressee*Inform","Addressee*Questions"),
-          dv.labels= "Mean Pitch")
-
-#pitch variability linear mixed effects model 
-
-sdpitch_model = lmer(log(sd_pit) ~ addressee + convo +convo*addressee + inform + inform*addressee + read + 
-       imperative + question + question*addressee + (1 | ID) + (1 | coder), data = pitch2)
-summary(sdpitch_model)
-tab_model(sdpitch_model, show.re.var= TRUE, 
-          pred.labels =c("(Intercept)", "Addressee", "Conversational Basics","Inform",
-                         "Reading", "Imperative","Questions","Addressee*Conversational Basics",
-                         "Addressee*Inform","Addressee*Questions"),
-          dv.labels= "Pitch Variability")
-
-#mean pitch - linear mixed effects model with just ADS utterances 
+###---------Linear Mixed Effects Model for Mean Pitch and Pitch Variability - ADS Utterances ONLY----------####
 
 ADScontexts <- subset(pitch, addressee == "ADS") 
 
@@ -145,15 +111,13 @@ tab_model(mpitch_modelADS, show.re.var= TRUE,
                          "Questions"),
           dv.labels= "Mean Pitch")
 
-
-#pitch variability - linear mixed effects model with just ADS utterances 
 sdpitch_modelADS = lmer(log(sd_pit) ~ convo + inform + question + (1 | ID) + (1 | coder), data = ADScontexts)
 summary(sdpitch_modelADS)
 tab_model(sdpitch_modelADS, show.re.var= TRUE, 
           pred.labels =c("(Intercept)", "Conversational Basics","Inform","Questions"),
           dv.labels= "Pitch Variability")
 
-#mean pitch linear mixed effects model with just IDS utterances 
+###---------Linear Mixed Effects Model for Mean Pitch and Pitch Variability - CDS Utterances ONLY---------####
 
 CDScontexts <- subset(pitch, addressee == "CDS") 
 
@@ -174,8 +138,6 @@ tab_model(mpitch_modelCDS, show.re.var= TRUE,
                          "Questions"),
           dv.labels= "Mean Pitch")
 
-
-#pitch variability- linear mixed effects model with just IDS utterances 
 sdpitch_modelCDS = lmer(log(sd_pit) ~ convo + inform + read + imperative + question + (1 | ID) + (1 | coder), data = CDScontexts)
 summary(sdpitch_modelCDS)
 
@@ -185,7 +147,7 @@ tab_model(sdpitch_modelCDS, show.re.var= TRUE,
           dv.labels= "Pitch Variability")
 
 
-####Context by Addressee Model#### 
+####----------Context by Addressee Model------------#### 
 
 #renaming speech column in pitch_org  to addressee 
 names(pitch)[names(pitch) == 'speech'] <- 'addressee'
@@ -202,4 +164,119 @@ tab_model(contextsbyadd, show.re.var= TRUE,
           pred.labels =c("(Intercept)", "Conversational Basics", "Comfort", "Singing", "Inform", "Questions",
                          "Vocal Play", "Noisy"),
           dv.labels= "Contexts by Addressee Model")
+
+meanpit = lmer(log(m_pitch) ~ convo + inform + imperative + question + (1 | ID) + (1 | coder), data = pitch)
+summary(meanpit)
+tab_model(meanpit, show.re.var= TRUE, 
+          pred.labels =c("(Intercept)", "Conversational Basics", "Inform", "Imperative", "Question"),
+          dv.labels= "Mean Pitch")
+
+###----------------- Mean Pitch and Pitch Variability Mixed Effects Models by Context ---------###
+
+#Convo- MEAN PITCH
+convodata <- pitch[ which(pitch$convo==1),]
+
+mpitchconvo = lmer(log(m_pitch) ~ addressee + (1 | ID) + (1 | coder), data = convodata)
+summary(mpitchconvo)
+tab_model(mpitchconvo, show.re.var= TRUE, 
+          pred.labels =c("(Intercept)", "Conversational Basics"),
+          dv.labels= "Mean Pitch")
+
+#Convo- VARIABILITY 
+sdpitchconvo = lmer(log(sd_pit) ~ addressee + (1 | ID) + (1 | coder), data = convodata)
+summary(sdpitchconvo)
+tab_model(sdpitchconvo, show.re.var= TRUE, 
+          pred.labels =c("(Intercept)", "Conversational Basics"),
+          dv.labels= "Pitch Variability")
+
+#Comfort- MEAN PITCH
+comfortdata <- pitch[ which(pitch$comfort==1),]
+
+mpitchcomfort = lmer(log(m_pitch) ~ addressee + (1 | ID) + (1 | coder), data = comfortdata)
+summary(mpitchcomfort)
+tab_model(mpitchcomfort, show.re.var= TRUE, 
+          pred.labels =c("(Intercept)", "Comfort"),
+          dv.labels= "Mean Pitch")
+
+#Comfort- VARIABILITY 
+sdpitchcomfort = lmer(log(sd_pit) ~ addressee + (1 | ID) + (1 | coder), data = comfortdata)
+summary(sdpitchcomfort)
+tab_model(sdpitchcomfort, show.re.var= TRUE, 
+          pred.labels =c("(Intercept)", "Comfort"),
+          dv.labels= "Pitch Variability")
+
+#Singing- MEAN PITCH
+singdata <- pitch[ which(pitch$sing==1),]
+
+mpitchsing = lmer(log(m_pitch) ~ addressee + (1 | ID) + (1 | coder), data = singdata)
+summary(mpitchsing)
+tab_model(mpitchsing, show.re.var= TRUE, 
+          pred.labels =c("(Intercept)", "Sing"),
+          dv.labels= "Mean Pitch")
+
+#Singing- VARIABILITY 
+sdpitchsing = lmer(log(sd_pit) ~ addressee + (1 | ID) + (1 | coder), data = singdata)
+summary(sdpitchsing)
+tab_model(sdpitchsing, show.re.var= TRUE, 
+          pred.labels =c("(Intercept)", "Sing"),
+          dv.labels= "Pitch Variability")
+
+#Inform _ MEAN PITCH
+informdata <- pitch[ which(pitch$inform==1),]
+informdata2 = lmer(log(m_pitch) ~ addressee + (1 | ID) + (1 | coder), data = informdata)
+summary(informdata2)
+tab_model(informdata2, show.re.var= TRUE, 
+          pred.labels =c("(Intercept)", "Inform"),
+          dv.labels= "Mean Pitch")
+
+#Inform -VARIABILITY 
+sdpitchinform = lmer(log(sd_pit) ~ addressee + (1 | ID) + (1 | coder), data = informdata)
+summary(sdpitchinform)
+tab_model(sdpitchinform, show.re.var= TRUE, 
+          pred.labels =c("(Intercept)", "Inform"),
+          dv.labels= "Pitch Variability")
+
+#imperative - MEAN PITCH
+imp <- pitch[ which(pitch$imperative==1),]
+impdat = lmer(log(m_pitch) ~ addressee + (1 | ID) + (1 | coder), data = imp)
+tab_model(impdat, show.re.var= TRUE, 
+          pred.labels =c("(Intercept)", "Imperative"),
+          dv.labels= "Mean Pitch")
+
+#imperative - VARIABILITY 
+sdpitchimp = lmer(log(sd_pit) ~ addressee + (1 | ID) + (1 | coder), data = imp)
+summary(sdpitchimp)
+tab_model(sdpitchimp, show.re.var= TRUE, 
+          pred.labels =c("(Intercept)", "Imperative"),
+          dv.labels= "Pitch Variability")
+
+#Qusetions - MEAN PITCH
+quest <- pitch[ which(pitch$question==1),]
+questdat = lmer(log(m_pitch) ~ addressee + (1 | ID) + (1 | coder), data = quest)
+summary(questdat)
+tab_model(questdat, show.re.var= TRUE, 
+          pred.labels =c("(Intercept)", "Question"),
+          dv.labels= "Mean Pitch")
+
+#Qusetions- VARIABILITY 
+sdpitchquest = lmer(log(sd_pit) ~ addressee + (1 | ID) + (1 | coder), data = quest)
+summary(sdpitchquest)
+tab_model(sdpitchquest, show.re.var= TRUE, 
+          pred.labels =c("(Intercept)", "Questions"),
+          dv.labels= "Pitch Variability")
+
+#Vocal Play - MEAN PITCH
+vpdata <- pitch[ which(pitch$question==1),]
+vpdat = lmer(log(m_pitch) ~ addressee + (1 | ID) + (1 | coder), data = vpdata)
+summary(vpdat)
+tab_model(vpdat, show.re.var= TRUE, 
+          pred.labels =c("(Intercept)", "Vocal Play"),
+          dv.labels= "Mean Pitch")
+
+#Vocal Play- VARIABILITY 
+sdpitchvp = lmer(log(sd_pit) ~ addressee + (1 | ID) + (1 | coder), data = vpdata)
+summary(sdpitchvp)
+tab_model(sdpitchvp, show.re.var= TRUE, 
+          pred.labels =c("(Intercept)", "Vocal Play"),
+          dv.labels= "Pitch Variability")
 
