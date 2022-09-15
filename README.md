@@ -1,5 +1,5 @@
 # context-study
- Code for the UCLA Emergence of Communication Lab's Pragamatic Contexts and Acoustic Characteristics of IDS and ADS in Daylong Audio Recordings
+Code for the UCLA Emergence of Communication Lab's Context and Pitch of Infant- and Adult- Directed Speech Sampled from Daylong Home Recordings of North American Infants Study
 
 Index of files in repository: 
 
