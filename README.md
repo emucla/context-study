@@ -3,16 +3,16 @@ Code for the UCLA Emergence of Communication Lab's Context and Pitch of Infant- 
 
 Index of files in repository: 
 
-.pitch_seg_data.csv = pitch analyses for audio files 
-
-.pilotdata.xlsx = context annotations + pitch analyses for annotated audio files included in the pilot analyses (needed to run models in R code)
-
 .pilot_Rcode.R = R code for pilot analyses 
+
+.pilotdata.xlsx = context annotations + pitch data for annotated audio files included in the pilot analyses
+
+.pitch_seg_data.csv = pitch data for audio files 
 
 
 Additional files: 
 
-PilotCode_V1.R and PilotCode_V2.R are R code from previous versions of the pre-registration. 
+PilotCode_inital.R and PilotCode_recode.R are R code from version 3 of the pre-registration on OSF. 
 
 The current pre-registration and analyses as well as previous versions of the pre-registration can be found on OSF: https://osf.io/va7c8/
 
