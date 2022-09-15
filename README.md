@@ -14,5 +14,5 @@ Additional files:
 
 PilotCode_inital.R and PilotCode_recode.R are R code from version 3 of the pre-registration on OSF. 
 
-The current pre-registration and analyses as well as previous versions of the pre-registration can be found on OSF: https://osf.io/va7c8/
+The current pre-registration and analyses as well as prior versions of the pre-registration can be found on OSF: https://osf.io/va7c8/
 
