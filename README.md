@@ -7,7 +7,7 @@ Index of files in repository:
 
 .pilotdata.xlsx = context annotations + pitch analyses for annotated audio files included in the pilot analyses (needed to run models in R code)
 
-.Pilot_Rcode.R = R code for pilot analyses 
+.pilot_Rcode.R = R code for pilot analyses 
 
 
 Additional files: 
