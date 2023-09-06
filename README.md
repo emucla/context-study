@@ -3,6 +3,10 @@ Code for the UCLA Emergence of Communication Lab's Context and Pitch of Infant- 
 
 Index of files in repository: 
 
+master.txt = data file used for manuscript analyses
+
+context manuscript code.R = code for running manuscript analyses and supplemental material output tables
+
 .pilot_Rcode.R = R code for pilot analyses 
 
 .pilotdata.xlsx = context annotations + pitch data for annotated audio files included in the pilot analyses
