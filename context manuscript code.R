@@ -1,4 +1,4 @@
-setwd("~/Desktop/Desktop - Emily’s MacBook Pro/Spring 2023/IDSLabel Analyses")
+setwd("~/Desktop")
 
 library(tidyverse)
 library(lme4)
