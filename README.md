@@ -7,7 +7,7 @@ master.txt = data file used for manuscript analyses
 
 Supplemental Material Code (Alt analyses).R = code for running the alternative analyses reported in the supplemental material 
 
-Context Manuscript Code.R = code for running manuscript analyses 
+Manuscript Code.R = code for running manuscript analyses 
 
 Code for Manuscript Plots.R =  code for generating manuscript plots
 
