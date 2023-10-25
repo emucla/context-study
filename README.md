@@ -1,5 +1,5 @@
 # context-study
-Code for the UCLA Emergence of Communication Lab's Context and Pitch of Infant- and Adult- Directed Speech Sampled from Daylong Home Recordings of North American Infants Study
+Code for the UCLA Emergence of Communication Lab's Effects of Pragmatic Context, Adult Gender, and Infant Gender on the Pitch Characteristics of Real-World Infant-Directed Speech Study
 
 Index of files in repository: 
 
