@@ -5,7 +5,11 @@ Index of files in repository:
 
 master.txt = data file used for manuscript analyses
 
-context manuscript code.R = code for running manuscript analyses and supplemental material output tables
+Supplemental Material Code (Alt analyses).R = code for running the alternative analyses reported in the supplemental material 
+
+Context Manuscript Code.R = code for running manuscript analyses 
+
+Code for Manuscript Plots.R =  code for generating manuscript plots
 
 .pilot_Rcode.R = R code for pilot analyses 
 
@@ -18,5 +22,4 @@ Additional files:
 
 PilotCode_inital.R and PilotCode_recode.R are R code from version 3 of the pre-registration on OSF. 
 
-The current pre-registration and analyses as well as prior versions of the pre-registration can be found on OSF: https://osf.io/va7c8/
-
+The current pre-registration and analyses as well as prior versions of the pre-registration can be found on OSF: https://osf.io/va7c8/?view_only=63b948f200654b9ab767a4cf3e351c59
