@@ -442,6 +442,16 @@ emmeans(sdpitchinformIDS, ~ adu_gender * chi_gender ) %>%
   contrast("pairwise", by = c( "adu_gender")) %>% 
   summary(by = NULL, adjust = "holm",infer =c(TRUE, TRUE))
 
+#estimate and line plot for inform standard deviation of pitch (Fig 3) 
+p<-plot_model(sdpitchinformIDS, type = "int", terms = c(chi_gender,adu_gender), ci.lvl = 0.95)
+p+
+  labs(x = "Adult Speaker Gender", y = "Predicted Standard Deviation of Pitch ") +
+  scale_y_continuous(limits = c(-0.45, 0.6))+
+  scale_x_discrete(limits=c( 0, 1), labels=c("Female", "Male"))+
+  scale_color_manual(values = c( "#CC5500","#702963"))+
+  theme_bw() 
+ggsave("plotinform2.svg")
+
 #interaction plots for adult gender and infant gender 
 
 adu_in_inform <- ggemmeans(sdpitchinformIDS, c("chi_gender", "adu_gender"))
@@ -521,6 +531,16 @@ emmeans(mpitchsingIDS, ~ adu_gender*chi_gender) %>%
 emmeans(mpitchsingIDS, ~ adu_gender*chi_gender) %>%
   contrast("pairwise", by = c("chi_gender")) %>% 
   summary(by = NULL, adjust = "holm", infer =c(TRUE, TRUE))
+
+#singing interaction plot estimate and line plot (Fig 3)
+p<-plot_model(mpitchsingIDS, type = "int", terms = c(chi_gender,adu_gender), ci.lvl = 0.95)
+p+
+  labs(x = "Adult Speaker Gender", y = "Predicted Mean Pitch") +
+  scale_y_continuous(limits = c(-2, 1.5))+
+  scale_x_discrete(limits=c( 0, 1), labels=c("Female", "Male"))+
+  scale_color_manual(values = c( "#CC5500","#702963"))+
+  theme_bw() 
+ggsave("plotsing2.svg")
 
 adu_inf_sing <- ggemmeans(mpitchsingIDS, c("chi_gender", "adu_gender"))
 plot(adu_inf_sing) + 
