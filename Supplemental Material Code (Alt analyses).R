@@ -119,7 +119,7 @@ tab_model(sdpitch_four, show.re.var= TRUE, show.se = TRUE, file = "sdpitch_four.
 IDS_data <- pitch[which(pitch$register > 0),]
 
 infant_model_mean = lmer(m_pitch ~ adu_gender*chi_gender*convo + adu_gender*chi_gender*inform + 
-              adu_gender*chi_gender*question + adu_gender*chi_gender*imperative + adu_gender*chi_gender*read + adu_gender*chi_gender*comfort 
+              adu_gender*chi_gender*question + adu_gender*chi_gender*imperative + adu_gender*chi_gender*read + adu_gender*chi_gender*comfort +
               (1|ID)+ (1|coder), data = IDS_data) 
 
 summary(infant_model_mean)
