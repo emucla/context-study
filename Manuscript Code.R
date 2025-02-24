@@ -13,6 +13,7 @@ library(emmeans)
 library(svglite)
 library(ggeffects)
 library(broom.mixed)
+library(brms)
 
 #read in the data 
 pitch_org <- read.table('master.txt', header=T)
@@ -102,70 +103,38 @@ pitch[,21] <- scale(pitch[,21], center = TRUE, scale = TRUE)
 
 #-----------------------frequency model-----------------------------------------------------------------# 
 
-#change-as-one model version 
+# bayesmodel <- brm(register ~ adu_gender*convo + adu_gender*comfort + adu_gender*sing + adu_gender*inform + adu_gender*imperative + adu_gender*question + adu_gender*read + adu_gender*vocalplay + (1|coder)+ (1|ID),
+#                   data = pitch,
+#                   family = bernoulli(link="logit"))
+# summary(bayes_model)
+# 
+# bayesmodel_enhanced <- brm(register ~ adu_gender*convo + adu_gender*comfort + adu_gender*sing + adu_gender*inform + adu_gender*imperative + adu_gender*question + adu_gender*read + adu_gender*vocalplay + (1|coder)+ (1|ID),
+#                   data = pitch,
+#                   family = bernoulli(link="logit"),
+#                   iter = 10000,
+#                   control=list(adapt_delta=0.9))
+# summary(bayesmodel_enhanced)
+# 
+# bayesmodel_contextsonly <- brm(register ~ convo + comfort + sing + inform + imperative + question + read + vocalplay + (1|coder)+ (1|ID),
+#                   data = pitch,
+#                   family = bernoulli(link="logit"))
+# summary(bayesmodel_contextsonly)
+# 
+# bayesmodel_contextsonly_enhanced <- brm(register ~ convo + comfort + sing + inform + imperative + question + read + vocalplay + (1|coder)+ (1|ID),
+#                                          data = pitch,
+#                                          family = bernoulli(link="logit"),
+#                                          iter = 10000,
+#                                          chains = 10,
+#                                          control=list(adapt_delta=0.9,max_treedepth=12))
+# summary(bayesmodel_contextsonly_enhanced)
 
-num_samples <- 100
-
-model_outputs <- vector("list", length = num_samples)
-
-for (i in 1:num_samples) {
-  
-  pitch_one <- pitch
-  
-  switchrow <- sample(which(pitch_one$vocalplay > 0),1)
-  
-  pitch_one$register[switchrow] = 0
-  
-  switchrow2 <- sample(which(pitch_one$read > 0),1)
-  
-  pitch_one$register[switchrow2] = 0
-  
- freqmodel_switch <- glmer(register ~ adu_gender*convo + adu_gender*comfort + adu_gender*sing + adu_gender*inform + adu_gender*imperative + adu_gender*question + adu_gender*read + adu_gender*vocalplay + (1|coder)+ (1|ID) ,
-                                                  data = pitch_one, 
-                                                  family=binomial, 
-                                                  glmerControl(optimizer = "bobyqa", 
-                                                             optCtrl = list(maxfun = 2e5)))
- model_outputs[[i]] <- tidy(freqmodel_switch, exponentiate = TRUE, conf.int=TRUE)
-  saveRDS(model_outputs, "model_outputs.rds")
-}
-
-
-# Create an empty data frame to store the summary results
-summary_df <- data.frame(term = character(),
-                         group = character(),
-                         estimate = numeric(),
-                         std.error = numeric(),
-                        statistic = numeric(),
-                         conf.low = numeric(),
-                         conf.high = numeric())
-                         p.value = numeric()
-
-# Loop through the list of models and extract summary information
-for (i in 1:length(model_outputs)) {
-  model_summary <- model_outputs[[i]]
-  summary_df <- bind_rows(summary_df, model_summary)
-}
-
-summary_table <- summary_df %>%
-  group_by(term, group) %>%
-  summarize(Avg_Estimate = mean(estimate),
-            Avg_Std_Error = mean(std.error),
-            Avg_p_value = mean(p.value),
-            Avg_Conf_Low = mean(conf.low),
-            Avg_Conf_High = mean(conf.high))
-
-summary <- print(summary_table)
-
-freqmodel <- glmer(register ~ adu_gender*convo + adu_gender*comfort + adu_gender*sing + adu_gender*inform + adu_gender*imperative + adu_gender*question + (1|coder)+ (1|ID) ,
-                  data = pitch, 
-                  family=binomial, 
-                  glmerControl(optimizer = "bobyqa", 
-                               optCtrl = list(maxfun = 2e5)))
-summary(freqmodel)
-
-tab_model(freqmodel, show.re.var= TRUE, show.se = TRUE, file = "freqmodel.html",
-          pred.labels =c("(Intercept)", "Adult Gender", "Conversational Basics", "Comfort", "Sing", "Inform", "Imperative", "Question", "Gender*Conversational Basics", "Gender*Comfort", "Gender*Sing", "Gender*Inform", "Gender*Imperative", "Gender*Question"),
-          dv.labels= "Proportion")
+bayesmodel_contextsonly_enhanced2 <- brm(register ~ convo + comfort + sing + inform + imperative + question + read + vocalplay + (1|coder)+ (1|ID),
+                                        data = pitch,
+                                        family = bernoulli(link="logit"),
+                                        iter = 10000,
+                                        chains = 10,
+                                        control=list(adapt_delta=0.9,max_treedepth=15))
+summary(bayesmodel_contextsonly_enhanced2)
 
 #------------- Acoustic Analysis 1: Adult Speaker Gender and Register Analysis (4 contexts)-------------#
 
