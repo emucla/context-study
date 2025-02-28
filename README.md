@@ -11,6 +11,8 @@ Manuscript Code.R = code for running manuscript analyses
 
 Code for Manuscript Plots.R =  code for generating manuscript plots
 
+contextsbyregister_prevalence_results.txt = Bayesian mixed effects model R output
+
 .pilot_Rcode.R = R code for pilot analyses 
 
 .pilotdata.xlsx = context annotations + pitch data for annotated audio files included in the pilot analyses
