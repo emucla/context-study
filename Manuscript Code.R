@@ -1,4 +1,4 @@
-setwd("~/Desktop")
+setwd("~/Documents/GitHub/context-study")
 
 library(tidyverse)
 library(lme4)
@@ -134,6 +134,7 @@ bayesmodel_contextsonly_enhanced2 <- brm(register ~ convo + comfort + sing + inf
                                         iter = 10000,
                                         chains = 10,
                                         control=list(adapt_delta=0.9,max_treedepth=15))
+saveRDS(bayesmodel_contextsonly_enhanced2,file="bayesmodel_contextsonly_enhanced2.rds")
 summary(bayesmodel_contextsonly_enhanced2)
 
 #------------- Acoustic Analysis 1: Adult Speaker Gender and Register Analysis (4 contexts)-------------#

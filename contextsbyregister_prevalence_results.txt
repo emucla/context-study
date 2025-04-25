@@ -1,3 +1,264 @@
+> setwd("~/Documents/GitHub/context-study")
+> library(tidyverse)
+── Attaching core tidyverse packages ─────────────────── tidyverse 2.0.0 ──
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ lubridate 1.9.4     ✔ tibble    3.2.1
+✔ purrr     1.0.2     ✔ tidyr     1.3.1
+✔ readr     2.1.5     
+── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
+✖ tidyr::expand() masks Matrix::expand()
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+✖ tidyr::pack()   masks Matrix::pack()
+✖ tidyr::unpack() masks Matrix::unpack()
+ℹ Use the conflicted package to force all conflicts to become errors
+> library(lme4)
+> library(lmerTest)
+> library(ggplot2)
+> library(sjPlot)
+Learn more about sjPlot with 'browseVignettes("sjPlot")'.
+> library(sjmisc)
+
+Attaching package: ‘sjmisc’
+
+The following object is masked from ‘package:purrr’:
+
+    is_empty
+
+The following object is masked from ‘package:tidyr’:
+
+    replace_na
+
+The following object is masked from ‘package:tibble’:
+
+    add_case
+
+> library(sjlabelled)
+
+Attaching package: ‘sjlabelled’
+
+The following object is masked from ‘package:forcats’:
+
+    as_factor
+
+The following object is masked from ‘package:dplyr’:
+
+    as_label
+
+The following object is masked from ‘package:ggplot2’:
+
+    as_label
+
+> library(dplyr)
+> library(contrast)
+> library(emmeans)
+Welcome to emmeans.
+Caution: You lose important information if you filter this package's results.
+See '? untidy'
+
+Attaching package: ‘emmeans’
+
+The following object is masked from ‘package:contrast’:
+
+    contrast
+
+> library(svglite)
+> library(ggeffects)
+> library(broom.mixed)
+> library(brms)
+Loading required package: Rcpp
+Loading 'brms' package (version 2.22.0). Useful instructions
+can be found by typing help('brms'). A more detailed introduction
+to the package is available through vignette('brms_overview').
+
+Attaching package: ‘brms’
+
+The following object is masked from ‘package:lme4’:
+
+    ngrps
+
+The following object is masked from ‘package:stats’:
+
+    ar
+
+> 
+> #read in the data 
+> pitch_org <- read.table('master.txt', header=T)
+> 
+> #clean data and re-code factors to numeric, binary codes
+> pitch <- pitch_org %>% 
++   #filter(noisy==1)
++   mutate(no_topic = if_all(convo:vocalplay, `==`,0)) %>% 
++   filter(!(no_topic & noisy == 1)) %>% # exclude 107 rows that are annotated exclusively as noisy (final count = 3620)
++   mutate(register = recode(register, ADS = '0', IDS = '1' ), #binary code register
++          register = as.numeric(register)) %>%
++   mutate(adu_gender = recode(adu_gender, female = '0', male = '1' ), 
++          adu_gender = as.numeric(adu_gender)) %>%
++   mutate(chi_gender = recode(chi_gender, female = '0', male = '1' ), 
++          chi_gender = as.numeric(chi_gender)) %>%
++   drop_na(adu_gender)
+> 
+> #get the counts for each pragmatic category, adult gender, and register
+> ADS_male <- subset(pitch, adu_gender == 1 & register == 0)
+> sum(ADS_male[,8]) #convo - 74
+[1] 74
+> sum(ADS_male[,9]) #comfort - 0
+[1] 0
+> sum(ADS_male[,10]) #sing - 1
+[1] 1
+> sum(ADS_male[,11]) #inform - 252
+[1] 252
+> sum(ADS_male[,12]) #reading - 0
+[1] 0
+> sum(ADS_male[,13]) #imperative - 8
+[1] 8
+> sum(ADS_male[,14]) #question - 58
+[1] 58
+> sum(ADS_male[,15]) #Vocal play - 0
+[1] 0
+> 
+> IDS_male <- subset(pitch, adu_gender == 1 & register == 1)
+> sum(IDS_male[,8]) #convo - 111
+[1] 111
+> sum(IDS_male[,9]) #comfort - 21
+[1] 21
+> sum(IDS_male[,10]) #sing - 65
+[1] 65
+> sum(IDS_male[,11]) #inform - 248
+[1] 248
+> sum(IDS_male[,12]) #reading - 63
+[1] 63
+> sum(IDS_male[,13]) #imperative - 80
+[1] 80
+> sum(IDS_male[,14]) #question - 132
+[1] 132
+> sum(IDS_male[,15]) #Vocal play - 12
+[1] 12
+> 
+> ADS_female <- subset(pitch, adu_gender == 0 & register == 0)
+> sum(ADS_female[,8]) #convo - 252
+[1] 252
+> sum(ADS_female[,9]) #comfort - 2
+[1] 2
+> sum(ADS_female[,10]) #sing - 1
+[1] 1
+> sum(ADS_female[,11]) #inform - 888
+[1] 888
+> sum(ADS_female[,12]) #reading - 0
+[1] 0
+> sum(ADS_female[,13]) #imperative - 35
+[1] 35
+> sum(ADS_female[,14]) #question - 154
+[1] 154
+> sum(ADS_female[,15]) #Vocal play - 0
+[1] 0
+> 
+> IDS_female <- subset(pitch, adu_gender == 0 & register == 1)
+> sum(IDS_female[,8]) #convo - 248
+[1] 248
+> sum(IDS_female[,9]) #comfort - 19
+[1] 19
+> sum(IDS_female[,10]) #sing - 159
+[1] 159
+> sum(IDS_female[,11]) #inform - 652
+[1] 652
+> sum(IDS_female[,12]) #reading - 169
+[1] 169
+> sum(IDS_female[,13]) #imperative - 269
+[1] 269
+> sum(IDS_female[,14]) #question - 401
+[1] 401
+> sum(IDS_female[,15]) #Vocal play - 25
+[1] 25
+> 
+> sum(pitch[,8]) #convo - 685
+[1] 685
+> sum(pitch[,9]) #comfort - 42
+[1] 42
+> sum(pitch[,10]) #sing - 226
+[1] 226
+> sum(pitch[,11]) #inform - 2040
+[1] 2040
+> sum(pitch[,12]) #reading - 232
+[1] 232
+> sum(pitch[,13]) #imperative - 392
+[1] 392
+> sum(pitch[,14]) #question - 745
+[1] 745
+> sum(pitch[,15]) #Vocal play - 37
+[1] 37
+> sum(pitch[,16]) #noisy - 69
+[1] 69
+> 
+> #convert variables to numeric values for centering and scaling
+> pitch$convo <- as.numeric(pitch$convo)
+> pitch$comfort <- as.numeric(pitch$comfort)
+> pitch$sing <- as.numeric(pitch$sing)
+> pitch$read <- as.numeric(pitch$read)
+> pitch$inform <- as.numeric(pitch$inform)
+> pitch$imperative <- as.numeric(pitch$imperative)
+> pitch$question <- as.numeric(pitch$question)
+> pitch$vocalplay <- as.numeric(pitch$vocalplay)
+> pitch$noisy <- as.numeric(pitch$noisy)
+> 
+> #check the structure of the dataset
+> str(pitch)
+'data.frame':	3607 obs. of  22 variables:
+ $ file      : chr  "V-S1MA_pass1_692_20" "V-S1MA_pass1_692_27" "V-S1MA_pass1_692_33" "V-S1MA_pass1_692_37" ...
+ $ register  : num  0 1 0 1 1 1 0 1 1 1 ...
+ $ m_pitch   : num  247 214 317 326 267 ...
+ $ min_pit   : num  115 178 163 176 173 ...
+ $ max_pit   : num  423 616 496 455 461 ...
+ $ sd_pit    : num  99.7 74.7 75 76.8 88.4 ...
+ $ range_pit : num  309 438 334 279 288 ...
+ $ convo     : num  1 1 1 1 0 0 0 1 0 0 ...
+ $ comfort   : num  0 0 0 0 0 0 0 0 0 0 ...
+ $ sing      : num  0 0 0 0 0 0 0 0 0 0 ...
+ $ inform    : num  0 0 0 1 0 1 1 0 1 1 ...
+ $ read      : num  0 0 0 0 0 0 0 0 0 0 ...
+ $ imperative: num  0 0 0 0 0 0 0 0 0 0 ...
+ $ question  : num  1 0 1 0 1 1 0 0 0 0 ...
+ $ vocalplay : num  0 0 0 0 0 0 0 0 0 0 ...
+ $ noisy     : num  0 1 0 0 0 0 0 0 0 0 ...
+ $ age       : int  17 17 17 17 17 17 17 17 17 17 ...
+ $ adu_gender: num  0 0 0 1 1 1 0 1 1 1 ...
+ $ coder     : chr  "emily" "emily" "emily" "emily" ...
+ $ ID        : chr  "V-S1MA" "V-S1MA" "V-S1MA" "V-S1MA" ...
+ $ chi_gender: num  1 1 1 1 1 1 1 1 1 1 ...
+ $ no_topic  : logi  FALSE FALSE FALSE FALSE FALSE FALSE ...
+> 
+> #center and scale predictors 
+> pitch[,8:16]<-scale(pitch[,8:16], center = TRUE, scale = TRUE)
+> pitch[,18] <- scale(pitch[,18], center = TRUE, scale = TRUE)
+> pitch[,21] <- scale(pitch[,21], center = TRUE, scale = TRUE)
+> 
+> #-----------------------frequency model-----------------------------------------------------------------# 
+> 
+> # bayesmodel <- brm(register ~ adu_gender*convo + adu_gender*comfort + adu_gender*sing + adu_gender*inform + adu_gender*imperative + adu_gender*question + adu_gender*read + adu_gender*vocalplay + (1|coder)+ (1|ID),
+> #                   data = pitch,
+> #                   family = bernoulli(link="logit"))
+> # summary(bayes_model)
+> # 
+> # bayesmodel_enhanced <- brm(register ~ adu_gender*convo + adu_gender*comfort + adu_gender*sing + adu_gender*inform + adu_gender*imperative + adu_gender*question + adu_gender*read + adu_gender*vocalplay + (1|coder)+ (1|ID),
+> #                   data = pitch,
+> #                   family = bernoulli(link="logit"),
+> #                   iter = 10000,
+> #                   control=list(adapt_delta=0.9))
+> # summary(bayesmodel_enhanced)
+> # 
+> # bayesmodel_contextsonly <- brm(register ~ convo + comfort + sing + inform + imperative + question + read + vocalplay + (1|coder)+ (1|ID),
+> #                   data = pitch,
+> #                   family = bernoulli(link="logit"))
+> # summary(bayesmodel_contextsonly)
+> # 
+> # bayesmodel_contextsonly_enhanced <- brm(register ~ convo + comfort + sing + inform + imperative + question + read + vocalplay + (1|coder)+ (1|ID),
+> #                                          data = pitch,
+> #                                          family = bernoulli(link="logit"),
+> #                                          iter = 10000,
+> #                                          chains = 10,
+> #                                          control=list(adapt_delta=0.9,max_treedepth=12))
+> # summary(bayesmodel_contextsonly_enhanced)
+> 
 > bayesmodel_contextsonly_enhanced2 <- brm(register ~ convo + comfort + sing + inform + imperative + question + read + vocalplay + (1|coder)+ (1|ID),
 +                                         data = pitch,
 +                                         family = bernoulli(link="logit"),
@@ -9,8 +270,8 @@ Start sampling
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 1).
 Chain 1: 
-Chain 1: Gradient evaluation took 0.000266 seconds
-Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 2.66 seconds.
+Chain 1: Gradient evaluation took 0.000296 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 2.96 seconds.
 Chain 1: Adjust your expectations accordingly!
 Chain 1: 
 Chain 1: 
@@ -27,15 +288,15 @@ Chain 1: Iteration: 8000 / 10000 [ 80%]  (Sampling)
 Chain 1: Iteration: 9000 / 10000 [ 90%]  (Sampling)
 Chain 1: Iteration: 10000 / 10000 [100%]  (Sampling)
 Chain 1: 
-Chain 1:  Elapsed Time: 2208.11 seconds (Warm-up)
-Chain 1:                1570.66 seconds (Sampling)
-Chain 1:                3778.77 seconds (Total)
+Chain 1:  Elapsed Time: 1703.06 seconds (Warm-up)
+Chain 1:                1632.62 seconds (Sampling)
+Chain 1:                3335.68 seconds (Total)
 Chain 1: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 2).
 Chain 2: 
-Chain 2: Gradient evaluation took 0.000162 seconds
-Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 1.62 seconds.
+Chain 2: Gradient evaluation took 0.000168 seconds
+Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 1.68 seconds.
 Chain 2: Adjust your expectations accordingly!
 Chain 2: 
 Chain 2: 
@@ -52,9 +313,9 @@ Chain 2: Iteration: 8000 / 10000 [ 80%]  (Sampling)
 Chain 2: Iteration: 9000 / 10000 [ 90%]  (Sampling)
 Chain 2: Iteration: 10000 / 10000 [100%]  (Sampling)
 Chain 2: 
-Chain 2:  Elapsed Time: 1249.91 seconds (Warm-up)
-Chain 2:                4010.88 seconds (Sampling)
-Chain 2:                5260.8 seconds (Total)
+Chain 2:  Elapsed Time: 1294.97 seconds (Warm-up)
+Chain 2:                1580.87 seconds (Sampling)
+Chain 2:                2875.83 seconds (Total)
 Chain 2: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 3).
@@ -77,15 +338,15 @@ Chain 3: Iteration: 8000 / 10000 [ 80%]  (Sampling)
 Chain 3: Iteration: 9000 / 10000 [ 90%]  (Sampling)
 Chain 3: Iteration: 10000 / 10000 [100%]  (Sampling)
 Chain 3: 
-Chain 3:  Elapsed Time: 1096.2 seconds (Warm-up)
-Chain 3:                12504.7 seconds (Sampling)
-Chain 3:                13600.9 seconds (Total)
+Chain 3:  Elapsed Time: 2200.19 seconds (Warm-up)
+Chain 3:                2800.13 seconds (Sampling)
+Chain 3:                5000.33 seconds (Total)
 Chain 3: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 4).
 Chain 4: 
-Chain 4: Gradient evaluation took 0.000266 seconds
-Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 2.66 seconds.
+Chain 4: Gradient evaluation took 0.000164 seconds
+Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 1.64 seconds.
 Chain 4: Adjust your expectations accordingly!
 Chain 4: 
 Chain 4: 
@@ -102,15 +363,15 @@ Chain 4: Iteration: 8000 / 10000 [ 80%]  (Sampling)
 Chain 4: Iteration: 9000 / 10000 [ 90%]  (Sampling)
 Chain 4: Iteration: 10000 / 10000 [100%]  (Sampling)
 Chain 4: 
-Chain 4:  Elapsed Time: 1023.84 seconds (Warm-up)
-Chain 4:                3583.6 seconds (Sampling)
-Chain 4:                4607.44 seconds (Total)
+Chain 4:  Elapsed Time: 2532.31 seconds (Warm-up)
+Chain 4:                2755.85 seconds (Sampling)
+Chain 4:                5288.16 seconds (Total)
 Chain 4: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 5).
 Chain 5: 
-Chain 5: Gradient evaluation took 0.000177 seconds
-Chain 5: 1000 transitions using 10 leapfrog steps per transition would take 1.77 seconds.
+Chain 5: Gradient evaluation took 0.000163 seconds
+Chain 5: 1000 transitions using 10 leapfrog steps per transition would take 1.63 seconds.
 Chain 5: Adjust your expectations accordingly!
 Chain 5: 
 Chain 5: 
@@ -127,15 +388,15 @@ Chain 5: Iteration: 8000 / 10000 [ 80%]  (Sampling)
 Chain 5: Iteration: 9000 / 10000 [ 90%]  (Sampling)
 Chain 5: Iteration: 10000 / 10000 [100%]  (Sampling)
 Chain 5: 
-Chain 5:  Elapsed Time: 702.63 seconds (Warm-up)
-Chain 5:                930.289 seconds (Sampling)
-Chain 5:                1632.92 seconds (Total)
+Chain 5:  Elapsed Time: 777.525 seconds (Warm-up)
+Chain 5:                1563.66 seconds (Sampling)
+Chain 5:                2341.19 seconds (Total)
 Chain 5: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 6).
 Chain 6: 
-Chain 6: Gradient evaluation took 0.000193 seconds
-Chain 6: 1000 transitions using 10 leapfrog steps per transition would take 1.93 seconds.
+Chain 6: Gradient evaluation took 0.000166 seconds
+Chain 6: 1000 transitions using 10 leapfrog steps per transition would take 1.66 seconds.
 Chain 6: Adjust your expectations accordingly!
 Chain 6: 
 Chain 6: 
@@ -152,15 +413,15 @@ Chain 6: Iteration: 8000 / 10000 [ 80%]  (Sampling)
 Chain 6: Iteration: 9000 / 10000 [ 90%]  (Sampling)
 Chain 6: Iteration: 10000 / 10000 [100%]  (Sampling)
 Chain 6: 
-Chain 6:  Elapsed Time: 5695.57 seconds (Warm-up)
-Chain 6:                1555.59 seconds (Sampling)
-Chain 6:                7251.16 seconds (Total)
+Chain 6:  Elapsed Time: 3464.78 seconds (Warm-up)
+Chain 6:                2642.65 seconds (Sampling)
+Chain 6:                6107.43 seconds (Total)
 Chain 6: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 7).
 Chain 7: 
-Chain 7: Gradient evaluation took 0.00016 seconds
-Chain 7: 1000 transitions using 10 leapfrog steps per transition would take 1.6 seconds.
+Chain 7: Gradient evaluation took 0.000161 seconds
+Chain 7: 1000 transitions using 10 leapfrog steps per transition would take 1.61 seconds.
 Chain 7: Adjust your expectations accordingly!
 Chain 7: 
 Chain 7: 
@@ -177,15 +438,15 @@ Chain 7: Iteration: 8000 / 10000 [ 80%]  (Sampling)
 Chain 7: Iteration: 9000 / 10000 [ 90%]  (Sampling)
 Chain 7: Iteration: 10000 / 10000 [100%]  (Sampling)
 Chain 7: 
-Chain 7:  Elapsed Time: 3517.6 seconds (Warm-up)
-Chain 7:                1577.49 seconds (Sampling)
-Chain 7:                5095.1 seconds (Total)
+Chain 7:  Elapsed Time: 1724.02 seconds (Warm-up)
+Chain 7:                1539.43 seconds (Sampling)
+Chain 7:                3263.45 seconds (Total)
 Chain 7: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 8).
 Chain 8: 
-Chain 8: Gradient evaluation took 0.000166 seconds
-Chain 8: 1000 transitions using 10 leapfrog steps per transition would take 1.66 seconds.
+Chain 8: Gradient evaluation took 0.000164 seconds
+Chain 8: 1000 transitions using 10 leapfrog steps per transition would take 1.64 seconds.
 Chain 8: Adjust your expectations accordingly!
 Chain 8: 
 Chain 8: 
@@ -202,15 +463,15 @@ Chain 8: Iteration: 8000 / 10000 [ 80%]  (Sampling)
 Chain 8: Iteration: 9000 / 10000 [ 90%]  (Sampling)
 Chain 8: Iteration: 10000 / 10000 [100%]  (Sampling)
 Chain 8: 
-Chain 8:  Elapsed Time: 959.792 seconds (Warm-up)
-Chain 8:                831.172 seconds (Sampling)
-Chain 8:                1790.96 seconds (Total)
+Chain 8:  Elapsed Time: 3645.73 seconds (Warm-up)
+Chain 8:                1542.86 seconds (Sampling)
+Chain 8:                5188.59 seconds (Total)
 Chain 8: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 9).
 Chain 9: 
-Chain 9: Gradient evaluation took 0.000164 seconds
-Chain 9: 1000 transitions using 10 leapfrog steps per transition would take 1.64 seconds.
+Chain 9: Gradient evaluation took 0.00016 seconds
+Chain 9: 1000 transitions using 10 leapfrog steps per transition would take 1.6 seconds.
 Chain 9: Adjust your expectations accordingly!
 Chain 9: 
 Chain 9: 
@@ -227,9 +488,9 @@ Chain 9: Iteration: 8000 / 10000 [ 80%]  (Sampling)
 Chain 9: Iteration: 9000 / 10000 [ 90%]  (Sampling)
 Chain 9: Iteration: 10000 / 10000 [100%]  (Sampling)
 Chain 9: 
-Chain 9:  Elapsed Time: 3522.36 seconds (Warm-up)
-Chain 9:                11141.6 seconds (Sampling)
-Chain 9:                14663.9 seconds (Total)
+Chain 9:  Elapsed Time: 1055.04 seconds (Warm-up)
+Chain 9:                3234.69 seconds (Sampling)
+Chain 9:                4289.73 seconds (Total)
 Chain 9: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 10).
@@ -252,10 +513,11 @@ Chain 10: Iteration: 8000 / 10000 [ 80%]  (Sampling)
 Chain 10: Iteration: 9000 / 10000 [ 90%]  (Sampling)
 Chain 10: Iteration: 10000 / 10000 [100%]  (Sampling)
 Chain 10: 
-Chain 10:  Elapsed Time: 716.597 seconds (Warm-up)
-Chain 10:                821.394 seconds (Sampling)
-Chain 10:                1537.99 seconds (Total)
+Chain 10:  Elapsed Time: 839.466 seconds (Warm-up)
+Chain 10:                8056.89 seconds (Sampling)
+Chain 10:                8896.35 seconds (Total)
 Chain 10: 
+> saveRDS(bayesmodel_contextsonly_enhanced2,file="bayesmodel_contextsonly_enhanced2.rds")
 > summary(bayesmodel_contextsonly_enhanced2)
  Family: bernoulli 
   Links: mu = logit 
@@ -267,23 +529,23 @@ Formula: register ~ convo + comfort + sing + inform + imperative + question + re
 Multilevel Hyperparameters:
 ~coder (Number of levels: 4) 
               Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-sd(Intercept)     0.19      0.24     0.01     0.76 1.00    13819    18163
+sd(Intercept)     0.19      0.25     0.01     0.78 1.00    14198    18775
 
 ~ID (Number of levels: 60) 
               Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-sd(Intercept)     2.04      0.26     1.60     2.60 1.00     6532    13647
+sd(Intercept)     2.04      0.26     1.60     2.60 1.00     7346    13131
 
 Regression Coefficients:
            Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-Intercept     10.01     12.39     2.43    38.66 1.00     4720     2973
-convo         -0.13      0.05    -0.22    -0.03 1.00    40031    35317
-comfort        0.17      0.10     0.00     0.39 1.00    45288    27535
-sing           1.08      0.20     0.75     1.53 1.00    39704    26664
-inform        -0.56      0.07    -0.68    -0.43 1.00    29596    34060
-imperative     0.55      0.06     0.43     0.68 1.00    37578    34847
-question       0.21      0.06     0.10     0.32 1.00    30927    35972
-read          16.98     28.86     1.65    79.86 1.00     6210     4061
-vocalplay     40.17     69.10     1.01   207.91 1.00     6931     3896
+Intercept      9.45      9.57     2.42    34.96 1.00     6844     5250
+convo         -0.13      0.05    -0.22    -0.03 1.00    47111    34923
+comfort        0.17      0.10     0.00     0.38 1.00    52284    28000
+sing           1.08      0.20     0.75     1.53 1.00    45735    27310
+inform        -0.55      0.07    -0.68    -0.43 1.00    35257    34665
+imperative     0.55      0.07     0.43     0.68 1.00    49238    34196
+question       0.21      0.06     0.10     0.32 1.00    40306    37140
+read          15.93     22.41     1.68    74.01 1.00     9072     7205
+vocalplay     37.41     58.65     1.02   183.97 1.00    10324     7582
 
 Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
 and Tail_ESS are effective sample size measures, and Rhat is the potential
