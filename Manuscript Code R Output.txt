@@ -1,0 +1,699 @@
+[1] 74
+[1] 0
+[1] 1
+[1] 252
+[1] 0
+[1] 8
+[1] 58
+[1] 0
+[1] 111
+[1] 21
+[1] 65
+[1] 248
+[1] 63
+[1] 80
+[1] 132
+[1] 12
+[1] 252
+[1] 2
+[1] 1
+[1] 888
+[1] 0
+[1] 35
+[1] 154
+[1] 0
+[1] 248
+[1] 19
+[1] 159
+[1] 652
+[1] 169
+[1] 269
+[1] 401
+[1] 25
+[1] 685
+[1] 42
+[1] 226
+[1] 2040
+[1] 232
+[1] 392
+[1] 745
+[1] 37
+[1] 69
+'data.frame':	3607 obs. of  22 variables:
+ $ file      : chr  "V-S1MA_pass1_692_20" "V-S1MA_pass1_692_27" "V-S1MA_pass1_692_33" "V-S1MA_pass1_692_37" ...
+ $ register  : num  0 1 0 1 1 1 0 1 1 1 ...
+ $ m_pitch   : num  247 214 317 326 267 ...
+ $ min_pit   : num  115 178 163 176 173 ...
+ $ max_pit   : num  423 616 496 455 461 ...
+ $ sd_pit    : num  99.7 74.7 75 76.8 88.4 ...
+ $ range_pit : num  309 438 334 279 288 ...
+ $ convo     : num  1 1 1 1 0 0 0 1 0 0 ...
+ $ comfort   : num  0 0 0 0 0 0 0 0 0 0 ...
+ $ sing      : num  0 0 0 0 0 0 0 0 0 0 ...
+ $ inform    : num  0 0 0 1 0 1 1 0 1 1 ...
+ $ read      : num  0 0 0 0 0 0 0 0 0 0 ...
+ $ imperative: num  0 0 0 0 0 0 0 0 0 0 ...
+ $ question  : num  1 0 1 0 1 1 0 0 0 0 ...
+ $ vocalplay : num  0 0 0 0 0 0 0 0 0 0 ...
+ $ noisy     : num  0 1 0 0 0 0 0 0 0 0 ...
+ $ age       : int  17 17 17 17 17 17 17 17 17 17 ...
+ $ adu_gender: num  0 0 0 1 1 1 0 1 1 1 ...
+ $ coder     : chr  "emily" "emily" "emily" "emily" ...
+ $ ID        : chr  "V-S1MA" "V-S1MA" "V-S1MA" "V-S1MA" ...
+ $ chi_gender: num  1 1 1 1 1 1 1 1 1 1 ...
+ $ no_topic  : logi  FALSE FALSE FALSE FALSE FALSE FALSE ...
+Linear mixed model fit by REML. t-tests use Satterthwaite's method [lmerModLmerTest
+]
+Formula: m_pitch ~ adu_gender * register + (1 | ID) + (1 | coder)
+   Data: informdat
+
+REML criterion at convergence: 4921.9
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-4.0025 -0.6668 -0.0673  0.5891  3.7039 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev.
+ ID       (Intercept) 0.1129290 0.33605 
+ coder    (Intercept) 0.0002426 0.01558 
+ Residual             0.6171191 0.78557 
+Number of obs: 2040, groups:  ID, 60; coder, 4
+
+Fixed effects:
+                      Estimate Std. Error         df t value Pr(>|t|)    
+(Intercept)          6.153e-03  5.094e-02  2.394e+01   0.121    0.905    
+adu_gender          -4.258e-01  2.424e-02  1.442e+03 -17.565  < 2e-16 ***
+register             1.874e-01  2.145e-02  1.759e+03   8.737  < 2e-16 ***
+adu_gender:register -8.855e-02  2.065e-02  1.807e+03  -4.287 1.91e-05 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) ad_gnd regstr
+adu_gender   0.018              
+register     0.042 -0.046       
+ad_gndr:rgs  0.032  0.370 -0.039
+                          2.5 %      97.5 %
+.sig01               0.26124332  0.42236451
+.sig02               0.00000000  0.11498704
+.sigma               0.76124149  0.81022690
+(Intercept)         -0.09634281  0.10725657
+adu_gender          -0.47334871 -0.37837262
+register             0.14542417  0.23014312
+adu_gender:register -0.12891882 -0.04772565
+Linear mixed model fit by REML. t-tests use Satterthwaite's method [lmerModLmerTest
+]
+Formula: sd_pit ~ adu_gender * register + (1 | ID) + (1 | coder)
+   Data: informdat
+
+REML criterion at convergence: 5586.6
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-7.6384 -0.5887  0.0487  0.6594  2.8506 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ ID       (Intercept) 0.061515 0.24802 
+ coder    (Intercept) 0.004901 0.07001 
+ Residual             0.869988 0.93273 
+Number of obs: 2040, groups:  ID, 60; coder, 4
+
+Fixed effects:
+                      Estimate Std. Error         df t value Pr(>|t|)    
+(Intercept)            0.02417    0.05641    7.16218   0.428    0.681    
+adu_gender            -0.04414    0.02715  821.88318  -1.626    0.104    
+register               0.13857    0.02453 1257.45089   5.648    2e-08 ***
+adu_gender:register   -0.03606    0.02369 1393.93660  -1.522    0.128    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) ad_gnd regstr
+adu_gender   0.013              
+register     0.056 -0.031       
+ad_gndr:rgs  0.019  0.335 -0.027
+                          2.5 %      97.5 %
+.sig01               0.18009890 0.326503177
+.sig02               0.00000000 0.192775539
+.sigma               0.90391024 0.961953712
+(Intercept)         -0.09955137 0.138090788
+adu_gender          -0.09723045 0.009291372
+register             0.09073288 0.186826776
+adu_gender:register -0.08225320 0.010557449
+Linear mixed model fit by REML. t-tests use Satterthwaite's method [lmerModLmerTest
+]
+Formula: m_pitch ~ adu_gender * register + (1 | ID) + (1 | coder)
+   Data: convodat
+
+REML criterion at convergence: 1711.8
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.2045 -0.5928 -0.0174  0.6067  3.5637 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ ID       (Intercept) 0.154483 0.3930  
+ coder    (Intercept) 0.005945 0.0771  
+ Residual             0.630494 0.7940  
+Number of obs: 685, groups:  ID, 57; coder, 4
+
+Fixed effects:
+                     Estimate Std. Error        df t value Pr(>|t|)    
+(Intercept)           0.10366    0.07776  12.55869   1.333  0.20617    
+adu_gender           -0.32716    0.03913 514.66328  -8.362 5.82e-16 ***
+register              0.15656    0.03624 633.08385   4.320 1.81e-05 ***
+adu_gender:register  -0.10909    0.03404 673.57975  -3.205  0.00141 ** 
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) ad_gnd regstr
+adu_gender  -0.001              
+register     0.001 -0.079       
+ad_gndr:rgs -0.015  0.143 -0.039
+                          2.5 %      97.5 %
+.sig01               0.28604561  0.51478695
+.sig02               0.00000000  0.22979919
+.sigma               0.75054390  0.83851200
+(Intercept)         -0.06408902  0.25596094
+adu_gender          -0.40437782 -0.24927044
+register             0.08514420  0.22819999
+adu_gender:register -0.17551947 -0.04222303
+ contrast                                                    register estimate
+ (adu_gender-0.590608795691099) - adu_gender1.69269873491747   -1.258    0.434
+ (adu_gender-0.590608795691099) - adu_gender1.69269873491747    0.795    0.945
+    SE  df lower.CL upper.CL t.ratio p.value
+ 0.123 680    0.157    0.711   3.520  0.0005
+ 0.117 503    0.681    1.209   8.045  <.0001
+
+Degrees-of-freedom method: kenward-roger 
+Confidence level used: 0.95 
+Conf-level adjustment: bonferroni method for 2 estimates 
+P value adjustment: holm method for 2 tests 
+ contrast                                               adu_gender estimate     SE
+ register0.794953738809553 - (register-1.2575860864489)     -0.591   0.4536 0.0871
+ register0.794953738809553 - (register-1.2575860864489)      1.693  -0.0577 0.1383
+  df lower.CL upper.CL t.ratio p.value
+ 632    0.258    0.649   5.211  <.0001
+ 676   -0.368    0.253  -0.417  0.6769
+
+Degrees-of-freedom method: kenward-roger 
+Confidence level used: 0.95 
+Conf-level adjustment: bonferroni method for 2 estimates 
+P value adjustment: holm method for 2 tests 
+Linear mixed model fit by REML. t-tests use Satterthwaite's method [lmerModLmerTest
+]
+Formula: sd_pit ~ adu_gender + register + adu_gender * register + (1 |  
+    ID) + (1 | coder)
+   Data: convodat
+
+REML criterion at convergence: 1745.9
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.8152 -0.6493  0.0288  0.6640  3.0548 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ ID       (Intercept) 0.07658  0.2767  
+ coder    (Intercept) 0.01897  0.1377  
+ Residual             0.68522  0.8278  
+Number of obs: 685, groups:  ID, 57; coder, 4
+
+Fixed effects:
+                     Estimate Std. Error        df t value Pr(>|t|)  
+(Intercept)           0.11233    0.09010   5.29551   1.247   0.2648  
+adu_gender           -0.05539    0.03831 352.48674  -1.446   0.1491  
+register              0.08433    0.03619 511.56514   2.330   0.0202 *
+adu_gender:register  -0.02962    0.03451 623.13018  -0.858   0.3911  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) ad_gnd regstr
+adu_gender   0.000              
+register     0.012 -0.078       
+ad_gndr:rgs -0.008  0.112 -0.030
+                          2.5 %     97.5 %
+.sig01               0.17538461 0.38857888
+.sig02               0.04159825 0.33433004
+.sigma               0.78261339 0.87414549
+(Intercept)         -0.08815421 0.29692145
+adu_gender          -0.13047830 0.02121863
+register             0.01305144 0.15538398
+adu_gender:register -0.09671624 0.03847417
+Linear mixed model fit by REML. t-tests use Satterthwaite's method [lmerModLmerTest
+]
+Formula: m_pitch ~ adu_gender + register + adu_gender * register + (1 |  
+    ID) + (1 | coder)
+   Data: questdat
+
+REML criterion at convergence: 1863.7
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.6279 -0.6628 -0.0030  0.6515  3.8457 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ ID       (Intercept) 0.1070   0.3272  
+ coder    (Intercept) 0.0000   0.0000  
+ Residual             0.6477   0.8048  
+Number of obs: 745, groups:  ID, 60; coder, 4
+
+Fixed effects:
+                     Estimate Std. Error        df t value Pr(>|t|)    
+(Intercept)           0.02455    0.05627  49.38794   0.436    0.665    
+adu_gender           -0.47531    0.03577 600.00568 -13.286  < 2e-16 ***
+register              0.18983    0.03622 706.20582   5.241 2.11e-07 ***
+adu_gender:register  -0.01972    0.03424 736.75537  -0.576    0.565    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) ad_gnd regstr
+adu_gender   0.002              
+register    -0.137  0.011       
+ad_gndr:rgs  0.026 -0.075 -0.028
+optimizer (nloptwrap) convergence code: 0 (OK)
+boundary (singular) fit: see help('isSingular')
+
+                          2.5 %      97.5 %
+.sig01               0.22779721  0.43354258
+.sig02               0.00000000  0.10484551
+.sigma               0.76266923  0.84781768
+(Intercept)         -0.08666625  0.13520201
+adu_gender          -0.54570766 -0.40534104
+register             0.11907862  0.26094826
+adu_gender:register -0.08661234  0.04770306
+Linear mixed model fit by REML. t-tests use Satterthwaite's method [lmerModLmerTest
+]
+Formula: sd_pit ~ adu_gender + register + adu_gender * register + (1 |  
+    ID) + (1 | coder)
+   Data: questdat
+
+REML criterion at convergence: 1984.1
+
+Scaled residuals: 
+     Min       1Q   Median       3Q      Max 
+-2.85848 -0.60009  0.00337  0.67482  2.53789 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ ID       (Intercept) 0.08104  0.2847  
+ coder    (Intercept) 0.00000  0.0000  
+ Residual             0.77664  0.8813  
+Number of obs: 745, groups:  ID, 60; coder, 4
+
+Fixed effects:
+                     Estimate Std. Error        df t value Pr(>|t|)   
+(Intercept)           0.07489    0.05379  51.51662   1.392  0.16982   
+adu_gender           -0.10579    0.03807 528.37973  -2.779  0.00564 **
+register              0.06022    0.03890 661.18531   1.548  0.12210   
+adu_gender:register   0.03402    0.03699 723.42350   0.920  0.35799   
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) ad_gnd regstr
+adu_gender  -0.001              
+register    -0.154  0.016       
+ad_gndr:rgs  0.027 -0.095 -0.028
+optimizer (nloptwrap) convergence code: 0 (OK)
+boundary (singular) fit: see help('isSingular')
+
+                          2.5 %      97.5 %
+.sig01               0.18703241  0.38801814
+.sig02               0.00000000  0.12320881
+.sigma               0.83564878  0.92768996
+(Intercept)         -0.02874599  0.17903489
+adu_gender          -0.18004756 -0.03135213
+register            -0.01526051  0.13685054
+adu_gender:register -0.03800710  0.10671250
+Linear mixed model fit by REML. t-tests use Satterthwaite's method [lmerModLmerTest
+]
+Formula: m_pitch ~ adu_gender + register + adu_gender * register + (1 |  
+    ID) + (1 | coder)
+   Data: impdat
+
+REML criterion at convergence: 892.8
+
+Scaled residuals: 
+     Min       1Q   Median       3Q      Max 
+-2.59511 -0.59362  0.00877  0.56765  3.10931 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ ID       (Intercept) 0.2431   0.493   
+ coder    (Intercept) 0.0000   0.000   
+ Residual             0.4625   0.680   
+Number of obs: 392, groups:  ID, 51; coder, 4
+
+Fixed effects:
+                     Estimate Std. Error        df t value Pr(>|t|)    
+(Intercept)           0.14403    0.09068  63.12772   1.588    0.117    
+adu_gender           -0.43254    0.06835 341.56719  -6.328  7.8e-10 ***
+register              0.06705    0.06614 387.32571   1.014    0.311    
+adu_gender:register  -0.04098    0.06642 374.32967  -0.617    0.538    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) ad_gnd regstr
+adu_gender   0.025              
+register    -0.431  0.010       
+ad_gndr:rgs -0.010 -0.566  0.006
+optimizer (nloptwrap) convergence code: 0 (OK)
+boundary (singular) fit: see help('isSingular')
+
+                          2.5 %      97.5 %
+.sig01               0.36178420  0.63866533
+.sig02               0.00000000  0.18463199
+.sigma               0.62971926  0.73201985
+(Intercept)         -0.03319805  0.32765623
+adu_gender          -0.56633262 -0.29770697
+register            -0.06207319  0.19774448
+adu_gender:register -0.17163814  0.08864388
+Linear mixed model fit by REML. t-tests use Satterthwaite's method [lmerModLmerTest
+]
+Formula: sd_pit ~ adu_gender + register + adu_gender * register + (1 |  
+    ID) + (1 | coder)
+   Data: impdat
+
+REML criterion at convergence: 1049.5
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.9570 -0.6808  0.1139  0.6678  2.6460 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ ID       (Intercept) 0.0958   0.3095  
+ coder    (Intercept) 0.0000   0.0000  
+ Residual             0.7683   0.8765  
+Number of obs: 392, groups:  ID, 51; coder, 4
+
+Fixed effects:
+                     Estimate Std. Error        df t value Pr(>|t|)  
+(Intercept)           0.07354    0.08185  63.25506   0.898   0.3723  
+adu_gender            0.06806    0.07687 214.88399   0.885   0.3769  
+register              0.11210    0.07952 339.79927   1.410   0.1595  
+adu_gender:register  -0.15109    0.08227 386.94927  -1.836   0.0671 .
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) ad_gnd regstr
+adu_gender   0.049              
+register    -0.574 -0.039       
+ad_gndr:rgs -0.046 -0.635  0.061
+optimizer (nloptwrap) convergence code: 0 (OK)
+boundary (singular) fit: see help('isSingular')
+
+                          2.5 %      97.5 %
+.sig01               0.15237508 0.453455377
+.sig02               0.00000000 0.173817609
+.sigma               0.81252754 0.943856191
+(Intercept)         -0.09596064 0.233542099
+adu_gender          -0.08153542 0.217814636
+register            -0.04329594 0.266992827
+adu_gender:register -0.31341065 0.009018901
+Linear mixed model fit by REML. t-tests use Satterthwaite's method [lmerModLmerTest
+]
+Formula: m_pitch ~ adu_gender * convo + adu_gender * sing + adu_gender *  
+    inform + adu_gender * read + adu_gender * imperative + adu_gender *  
+    question + adu_gender * comfort + (1 | ID) + (1 | coder)
+   Data: IDS_data
+
+REML criterion at convergence: 5602.4
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.9420 -0.6223 -0.0057  0.6018  4.2775 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ ID       (Intercept) 0.09496  0.30815 
+ coder    (Intercept) 0.00975  0.09874 
+ Residual             0.67943  0.82428 
+Number of obs: 2210, groups:  ID, 60; coder, 4
+
+Fixed effects:
+                        Estimate Std. Error         df t value Pr(>|t|)    
+(Intercept)            1.977e-01  6.874e-02  6.654e+00   2.876  0.02513 *  
+adu_gender            -4.721e-01  2.600e-02  1.161e+03 -18.158  < 2e-16 ***
+convo                  3.395e-02  2.016e-02  2.170e+03   1.684  0.09233 .  
+sing                  -1.195e-02  1.925e-02  2.111e+03  -0.621  0.53471    
+inform                -1.323e-02  2.303e-02  2.192e+03  -0.575  0.56560    
+read                  -3.574e-02  1.960e-02  1.991e+03  -1.824  0.06833 .  
+imperative             1.187e-02  1.743e-02  2.166e+03   0.681  0.49594    
+question               1.131e-03  2.043e-02  2.182e+03   0.055  0.95587    
+comfort                1.916e-02  1.759e-02  2.162e+03   1.089  0.27612    
+adu_gender:convo       1.518e-02  1.929e-02  2.155e+03   0.787  0.43122    
+adu_gender:sing       -4.893e-02  1.815e-02  2.134e+03  -2.697  0.00706 ** 
+adu_gender:inform     -2.845e-02  2.236e-02  2.189e+03  -1.272  0.20343    
+adu_gender:read       -2.716e-02  1.823e-02  2.166e+03  -1.490  0.13632    
+adu_gender:imperative  4.635e-03  1.785e-02  2.179e+03   0.260  0.79518    
+adu_gender:question   -2.363e-02  2.026e-02  2.178e+03  -1.166  0.24359    
+adu_gender:comfort    -2.770e-02  1.437e-02  2.103e+03  -1.928  0.05394 .  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+                             2.5 %        97.5 %
+.sig01                 0.238888607  0.3878835699
+.sig02                 0.027356363  0.2439445824
+.sigma                 0.797585642  0.8468065307
+(Intercept)            0.058302543  0.3477524896
+adu_gender            -0.523048405 -0.4215247660
+convo                 -0.005448271  0.0733758040
+sing                  -0.049560648  0.0256668532
+inform                -0.058179587  0.0318310075
+read                  -0.074190474  0.0025296063
+imperative            -0.022286867  0.0458663046
+question              -0.038818439  0.0410257608
+comfort               -0.015155633  0.0536281033
+adu_gender:convo      -0.022666372  0.0527509064
+adu_gender:sing       -0.084668351 -0.0136606253
+adu_gender:inform     -0.072111227  0.0152832469
+adu_gender:read       -0.062801840  0.0085002027
+adu_gender:imperative -0.030447964  0.0393745947
+adu_gender:question   -0.063307603  0.0158714803
+adu_gender:comfort    -0.056262066  0.0002284057
+ contrast                                        adu_gender estimate     SE   df
+ sing3.86730260661001 - (sing-0.258506474147845)     -0.591   0.0699 0.0946 2143
+ sing3.86730260661001 - (sing-0.258506474147845)      1.693  -0.3910 0.1438 2099
+ lower.CL upper.CL t.ratio p.value
+   -0.142   0.2820   0.739  0.4598
+   -0.714  -0.0684  -2.718  0.0132
+
+Results are averaged over the levels of: convo, inform, read, imperative, question, comfort 
+Degrees-of-freedom method: kenward-roger 
+Confidence level used: 0.95 
+Conf-level adjustment: bonferroni method for 2 estimates 
+P value adjustment: holm method for 2 tests 
+ contrast                                                      sing estimate    SE
+ (adu_gender-0.590608795691099) - adu_gender1.69269873491747 -0.259     1.44 0.209
+ (adu_gender-0.590608795691099) - adu_gender1.69269873491747  3.867     1.90 0.280
+   df lower.CL upper.CL t.ratio p.value
+ 2122    0.968     1.91   6.877  <.0001
+ 2176    1.271     2.52   6.790  <.0001
+
+Results are averaged over the levels of: convo, inform, read, imperative, question, comfort 
+Degrees-of-freedom method: kenward-roger 
+Confidence level used: 0.95 
+Conf-level adjustment: bonferroni method for 2 estimates 
+P value adjustment: holm method for 2 tests 
+Linear mixed model fit by REML. t-tests use Satterthwaite's method [lmerModLmerTest
+]
+Formula: sd_pit ~ adu_gender * convo + adu_gender * sing + adu_gender *  
+    inform + adu_gender * read + adu_gender * imperative + adu_gender *  
+    question + adu_gender * comfort + (1 | ID) + (1 | coder)
+   Data: IDS_data
+
+REML criterion at convergence: 6023.8
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-5.0166 -0.6089  0.0449  0.6792  3.1809 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ ID       (Intercept) 0.04655  0.2158  
+ coder    (Intercept) 0.00000  0.0000  
+ Residual             0.83919  0.9161  
+Number of obs: 2210, groups:  ID, 60; coder, 4
+
+Fixed effects:
+                        Estimate Std. Error         df t value Pr(>|t|)    
+(Intercept)            1.104e-01  3.699e-02  5.946e+01   2.984  0.00412 ** 
+adu_gender            -8.927e-02  2.669e-02  5.631e+02  -3.344  0.00088 ***
+convo                  4.746e-02  2.218e-02  2.186e+03   2.140  0.03250 *  
+sing                  -1.904e-01  2.080e-02  1.792e+03  -9.155  < 2e-16 ***
+inform                -2.201e-02  2.530e-02  2.179e+03  -0.870  0.38427    
+read                   6.164e-03  2.090e-02  1.597e+03   0.295  0.76814    
+imperative             4.000e-03  1.900e-02  2.194e+03   0.211  0.83329    
+question              -1.928e-03  2.253e-02  2.194e+03  -0.086  0.93182    
+comfort                5.510e-02  1.914e-02  1.975e+03   2.879  0.00403 ** 
+adu_gender:convo       8.992e-03  2.136e-02  2.173e+03   0.421  0.67384    
+adu_gender:sing       -5.537e-02  1.960e-02  1.949e+03  -2.825  0.00477 ** 
+adu_gender:inform      2.043e-02  2.460e-02  2.189e+03   0.830  0.40638    
+adu_gender:read       -9.573e-03  1.981e-02  1.927e+03  -0.483  0.62895    
+adu_gender:imperative  1.437e-02  1.970e-02  2.193e+03   0.729  0.46579    
+adu_gender:question    1.476e-02  2.236e-02  2.193e+03   0.660  0.50929    
+adu_gender:comfort    -8.777e-03  1.552e-02  1.817e+03  -0.566  0.57171    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+optimizer (nloptwrap) convergence code: 0 (OK)
+boundary (singular) fit: see help('isSingular')
+
+                             2.5 %      97.5 %
+.sig01                 0.154561218  0.27917576
+.sig02                 0.000000000  0.08038350
+.sigma                 0.886527437  0.94106618
+(Intercept)            0.038467675  0.18227144
+adu_gender            -0.141373330 -0.03732050
+convo                  0.004208288  0.09092906
+sing                  -0.231338101 -0.14989929
+inform                -0.071411420  0.02740462
+read                  -0.034675276  0.04690480
+imperative            -0.033076651  0.04117030
+question              -0.046222941  0.04195426
+comfort                0.017627959  0.09237905
+adu_gender:convo      -0.032730792  0.05076183
+adu_gender:sing       -0.093717727 -0.01718491
+adu_gender:inform     -0.027466374  0.06878418
+adu_gender:read       -0.048159280  0.02920710
+adu_gender:imperative -0.024101903  0.05286379
+adu_gender:question   -0.028795461  0.05871232
+adu_gender:comfort    -0.038979123  0.02185534
+ contrast                                        adu_gender estimate    SE   df
+ sing3.86730260661001 - (sing-0.258506474147845)     -0.591   -0.651 0.104 1524
+ sing3.86730260661001 - (sing-0.258506474147845)      1.693   -1.172 0.157 1836
+ lower.CL upper.CL t.ratio p.value
+   -0.883   -0.418  -6.268  <.0001
+   -1.524   -0.820  -7.470  <.0001
+
+Results are averaged over the levels of: convo, inform, read, imperative, question, comfort 
+Degrees-of-freedom method: kenward-roger 
+Confidence level used: 0.95 
+Conf-level adjustment: bonferroni method for 2 estimates 
+P value adjustment: holm method for 2 tests 
+ contrast                                                      sing estimate    SE
+ (adu_gender-0.590608795691099) - adu_gender1.69269873491747 -0.259    0.225 0.227
+ (adu_gender-0.590608795691099) - adu_gender1.69269873491747  3.867    0.747 0.309
+   df lower.CL upper.CL t.ratio p.value
+ 1784  -0.2838    0.735   0.993  0.3208
+ 1558   0.0547    1.439   2.421  0.0312
+
+Results are averaged over the levels of: convo, inform, read, imperative, question, comfort 
+Degrees-of-freedom method: kenward-roger 
+Confidence level used: 0.95 
+Conf-level adjustment: bonferroni method for 2 estimates 
+P value adjustment: holm method for 2 tests 
+Linear mixed model fit by REML. t-tests use Satterthwaite's method [lmerModLmerTest
+]
+Formula: m_pitch ~ adu_gender * chi_gender + (1 | ID) + (1 | coder)
+   Data: informIDSdat
+
+REML criterion at convergence: 2221.9
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.7497 -0.6597 -0.0162  0.5806  3.5214 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ ID       (Intercept) 0.08440  0.29051 
+ coder    (Intercept) 0.00212  0.04604 
+ Residual             0.63882  0.79926 
+Number of obs: 900, groups:  ID, 59; coder, 4
+
+Fixed effects:
+                       Estimate Std. Error        df t value Pr(>|t|)    
+(Intercept)             0.16912    0.05784   8.41516   2.924   0.0182 *  
+adu_gender             -0.51684    0.03865 233.84238 -13.373   <2e-16 ***
+chi_gender              0.03437    0.04845  45.04876   0.709   0.4818    
+adu_gender:chi_gender   0.02466    0.03764 233.46877   0.655   0.5130    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) ad_gnd ch_gnd
+adu_gender   0.008              
+chi_gender   0.188 -0.043       
+ad_gndr:ch_ -0.052  0.090  0.042
+                            2.5 %     97.5 %
+.sig01                 0.19470568  0.3811536
+.sig02                 0.00000000  0.1708878
+.sigma                 0.76234328  0.8390034
+(Intercept)            0.05775000  0.2980964
+adu_gender            -0.59131446 -0.4408360
+chi_gender            -0.05945844  0.1287227
+adu_gender:chi_gender -0.04839864  0.0991601
+Linear mixed model fit by REML. t-tests use Satterthwaite's method [lmerModLmerTest
+]
+Formula: sd_pit ~ adu_gender * chi_gender + (1 | ID) + (1 | coder)
+   Data: informIDSdat
+
+REML criterion at convergence: 2359.6
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-5.0341 -0.5997  0.0101  0.6797  2.8127 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ ID       (Intercept) 0.0756   0.2750  
+ coder    (Intercept) 0.0000   0.0000  
+ Residual             0.7527   0.8676  
+Number of obs: 900, groups:  ID, 59; coder, 4
+
+Fixed effects:
+                       Estimate Std. Error        df t value Pr(>|t|)   
+(Intercept)             0.15000    0.05154  44.86685   2.910  0.00560 **
+adu_gender             -0.11653    0.04038 201.28729  -2.886  0.00433 **
+chi_gender              0.04451    0.04835  47.55836   0.921  0.36191   
+adu_gender:chi_gender  -0.08451    0.03929 209.96790  -2.151  0.03261 * 
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) ad_gnd ch_gnd
+adu_gender   0.009              
+chi_gender   0.201 -0.046       
+ad_gndr:ch_ -0.045  0.086  0.040
+optimizer (nloptwrap) convergence code: 0 (OK)
+boundary (singular) fit: see help('isSingular')
+
+                            2.5 %       97.5 %
+.sig01                 0.17850048  0.364339313
+.sig02                 0.00000000  0.139254116
+.sigma                 0.82739407  0.910000162
+(Intercept)            0.04798772  0.254198030
+adu_gender            -0.19484297 -0.037059764
+chi_gender            -0.04918117  0.138309955
+adu_gender:chi_gender -0.16087398 -0.008348454
+ contrast                                                    chi_gender estimate
+ (adu_gender-0.590608795691099) - adu_gender1.69269873491747     -1.368  0.00209
+ (adu_gender-0.590608795691099) - adu_gender1.69269873491747      0.731  0.40709
+    SE  df lower.CL upper.CL t.ratio p.value
+ 0.149 221   -0.335    0.339   0.014  0.9888
+ 0.121 191    0.134    0.680   3.371  0.0018
+
+Degrees-of-freedom method: kenward-roger 
+Confidence level used: 0.95 
+Conf-level adjustment: bonferroni method for 2 estimates 
+P value adjustment: holm method for 2 tests 
+ contrast                                                    adu_gender estimate
+ (chi_gender-1.36795334239978) - chi_gender0.730816417717618     -0.591   -0.198
+ (chi_gender-1.36795334239978) - chi_gender0.730816417717618      1.693    0.207
+    SE    df lower.CL upper.CL t.ratio p.value
+ 0.112  59.7   -0.455   0.0586  -1.774  0.1622
+ 0.179 105.7   -0.201   0.6146   1.153  0.2514
+
+Degrees-of-freedom method: kenward-roger 
+Confidence level used: 0.95 
+Conf-level adjustment: bonferroni method for 2 estimates 
+P value adjustment: holm method for 2 tests 
